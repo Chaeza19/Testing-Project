@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">Testing</string>
-    <string name="count_minus" />
-    <string name="count_plus" />
+    <string name="gambar">Gambar %1$s</string>
 </resources>
