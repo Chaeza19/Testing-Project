@@ -1,5 +1,7 @@
 package org.d3if3056.testing.ui.screen
 
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -31,19 +33,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3056.testing.R
@@ -99,6 +100,8 @@ fun ScreenContent(modifier: Modifier){
 
     var bmi by rememberSaveable { mutableStateOf(0f) }
     var kategori by rememberSaveable { mutableIntStateOf(0) }
+
+    val context = LocalContext.current
 
     Column (
         modifier = modifier
@@ -185,6 +188,20 @@ fun ScreenContent(modifier: Modifier){
                 text = stringResource(id = kategori).uppercase(),
                 style = MaterialTheme.typography.headlineLarge
             )
+            Button(
+                onClick = {
+                          shareData(
+                              context = context,
+                              message = context.getString(R.string.bagikan_template,
+                                  berat, tinggi, gender, bmi,
+                                  context.getString(kategori).uppercase())
+                          )
+                },
+                modifier = Modifier.padding(top = 8.dp),
+                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+            ) {
+                Text(text = stringResource(id = R.string.bagikan))
+            }
         }
     }
 }
@@ -221,6 +238,16 @@ private fun getKategori(bmi: Float, isMale: Boolean): Int{
             bmi >= 25.0 -> R.string.gemuk
             else -> R.string.ideal
         }
+    }
+}
+
+private fun shareData(context: Context, message: String){
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, message)
+    }
+    if (shareIntent.resolveActivity(context.packageManager) != null){
+        context.startActivity(shareIntent)
     }
 }
 
