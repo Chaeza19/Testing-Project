@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -83,21 +84,21 @@ fun MainScreen(navController: NavHostController) {
 
 @Composable
 fun ScreenContent(modifier: Modifier){
-    var berat by remember { mutableStateOf("") }
-    var beratError by remember { mutableStateOf(false) }
+    var berat by rememberSaveable { mutableStateOf("") }
+    var beratError by rememberSaveable { mutableStateOf(false) }
 
-    var tinggi by remember { mutableStateOf("") }
-    var tinggiError by remember { mutableStateOf(false) }
+    var tinggi by rememberSaveable { mutableStateOf("") }
+    var tinggiError by rememberSaveable { mutableStateOf(false) }
 
     val radioOptions = listOf(
         stringResource(id = R.string.pria),
         stringResource(id = R.string.wanita)
     )
 
-    var gender by remember { mutableStateOf(radioOptions[0]) }
+    var gender by rememberSaveable { mutableStateOf(radioOptions[0]) }
 
-    var bmi by remember { mutableStateOf(0f) }
-    var kategori by remember { mutableIntStateOf(0) }
+    var bmi by rememberSaveable { mutableStateOf(0f) }
+    var kategori by rememberSaveable { mutableIntStateOf(0) }
 
     Column (
         modifier = modifier
