@@ -13,12 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import org.d3if3056.testing.R
 import org.d3if3056.testing.ui.theme.TestingTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutScreen() {
+fun AboutScreen(navController: NavHostController) {
     Scaffold(
         topBar = { //Untuk Bagian TopBar
             TopAppBar(title = { Text(text = stringResource(id = R.string.tentang_aplikasi)) },
@@ -31,7 +33,9 @@ fun AboutScreen() {
     ) { padding ->
         Text(
             text = stringResource(id = R.string.copyright),
-            modifier = Modifier.padding(padding).padding(16.dp)
+            modifier = Modifier
+                .padding(padding)
+                .padding(16.dp)
         )
     }
 }
@@ -41,6 +45,6 @@ fun AboutScreen() {
 @Composable
 fun AboutScreenPreview() {
     TestingTheme {
-        MainScreen()
+        AboutScreen(rememberNavController())
     }
 }
