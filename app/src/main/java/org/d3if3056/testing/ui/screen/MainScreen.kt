@@ -5,13 +5,18 @@ import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -34,6 +39,8 @@ import org.d3if3056.testing.ui.theme.TestingTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
+    val context = LocalContext.current
+
     Scaffold(
         topBar = { //Untuk Bagian TopBar
             TopAppBar(title = { Text(text = stringResource(id = R.string.app_name)) },
@@ -42,6 +49,17 @@ fun MainScreen() {
                     titleContentColor = MaterialTheme.colorScheme.primary
                 )
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                Toast.makeText(context, R.string.tambah_error, Toast.LENGTH_SHORT).show()
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = stringResource(id = R.string.tambah_catatan),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
         }
     ) { padding ->
         ScreenContent(Modifier.padding(padding))
@@ -72,7 +90,8 @@ fun ScreenContent(modifier: Modifier){
     }
     else {
         LazyColumn(
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(bottom = 84.dp)
         ){
             items(data){
                 ListItem(catatan = it){
