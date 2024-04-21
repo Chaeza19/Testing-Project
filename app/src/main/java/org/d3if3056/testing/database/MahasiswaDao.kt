@@ -20,4 +20,7 @@ interface MahasiswaDao {
 
     @Query("SELECT * FROM mahasiswa WHERE id = :id")
     suspend fun getMahasiswaById(id: Long): Mahasiswa?
+
+    @Query("DELETE FROM mahasiswa WHERE id = :id")
+    suspend fun deleteById(id: Long)
 }
