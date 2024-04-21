@@ -1,7 +1,6 @@
 package org.d3if3056.testing.ui.screen
 
 import android.content.res.Configuration
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,21 +24,22 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import org.d3if3056.testing.R
-import org.d3if3056.testing.model.Catatan
+import org.d3if3056.testing.model.Mahasiswa
+import org.d3if3056.testing.navigation.Screen
 import org.d3if3056.testing.ui.theme.TestingTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
-    val context = LocalContext.current
+fun MainScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = { //Untuk Bagian TopBar
@@ -51,31 +51,27 @@ fun MainScreen() {
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                Toast.makeText(context, R.string.tambah_error, Toast.LENGTH_SHORT).show()
-            }) {
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate(Screen.FormMahasiswa.route)
+                }
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
-                    contentDescription = stringResource(id = R.string.tambah_catatan),
-                    tint = MaterialTheme.colorScheme.primary
+                    contentDescription = stringResource(id = R.string.tambah_mahasiswa)
                 )
             }
         }
     ) { padding ->
-        ScreenContent(Modifier.padding(padding))
+        ScreenContent(Modifier.padding(padding), navController)
     }
 }
 
-class ExperimentalMaterial3Api {
-
-}
-
 @Composable
-fun ScreenContent(modifier: Modifier){
+fun ScreenContent(modifier: Modifier, navController: NavHostController){
     val viewModel: MainViewModel = viewModel()
     val data = viewModel.data
-//    val data = emptyList<Catatan>()
-    val context = LocalContext.current
+//    val data = emptyList<Catatan>() // jika datanya kosong
 
     if (data.isEmpty()){
         Column(
@@ -88,24 +84,24 @@ fun ScreenContent(modifier: Modifier){
             Text(text = stringResource(id = R.string.list_kosong))
         }
     }
-    else {
-        LazyColumn(
-            modifier = modifier.fillMaxWidth(),
+    else{
+        LazyColumn (
+            modifier = modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 84.dp)
         ){
             items(data){
-                ListItem(catatan = it){
-                    val pesan = context.getString(R.string.x_diklik, it.judul)
-                    Toast.makeText(context, pesan, Toast.LENGTH_SHORT).show()
+                ListItem(mahasiswa = it){
+                    navController.navigate(Screen.FormUbah.withId(it.id))
                 }
                 Divider()
             }
         }
     }
+
 }
 
 @Composable
-fun ListItem(catatan: Catatan, onClick: () -> Unit){
+fun ListItem(mahasiswa: Mahasiswa, onClick: () -> Unit){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -114,17 +110,16 @@ fun ListItem(catatan: Catatan, onClick: () -> Unit){
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            text = catatan.judul,
-            maxLines = 1,
+            text = mahasiswa.nama,
+            maxLines = 1, //maxLines = maksimal 1 baris
             overflow = TextOverflow.Ellipsis,
-            fontWeight = FontWeight.Bold
-            )
-        Text(
-            text = catatan.catatan,
-            maxLines = 2,
+            fontWeight = FontWeight.Bold //mempertebal tulisan
+        )
+        Text(text = mahasiswa.nim,
+            maxLines = 2, //maxLines = maksimal 2 baris
             overflow = TextOverflow.Ellipsis
         )
-        Text(text = catatan.tanggal)
+        Text(text = mahasiswa.kelas)
     }
 }
 
@@ -133,6 +128,6 @@ fun ListItem(catatan: Catatan, onClick: () -> Unit){
 @Composable
 fun GreetingPreview() {
     TestingTheme {
-        MainScreen()
+        MainScreen(rememberNavController())
     }
 }
