@@ -132,11 +132,11 @@ fun DetailScreen(navController: NavHostController, id: Long? = null){
                             contentDescription = stringResource(id = R.string.simpan),
                             tint = MaterialTheme.colorScheme.primary
                         )
-                        if (id != null){
-                            DeleteAction {
-                                viewModel.delete(id)
-                                navController.popBackStack()
-                            }
+                    }
+                    if (id != null){
+                        DeleteAction {
+                            viewModel.delete(id)
+                            navController.popBackStack()
                         }
                     }
                 }
