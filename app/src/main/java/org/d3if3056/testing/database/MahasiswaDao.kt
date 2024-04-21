@@ -17,4 +17,7 @@ interface MahasiswaDao {
 
     @Query("SELECT * FROM mahasiswa ORDER BY kelas DESC")
     fun getMahasiswa() : Flow<List<Mahasiswa>>
+
+    @Query("SELECT * FROM mahasiswa WHERE id = :id")
+    suspend fun getMahasiswaById(id: Long): Mahasiswa?
 }

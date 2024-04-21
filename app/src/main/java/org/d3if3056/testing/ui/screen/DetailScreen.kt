@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -71,13 +72,17 @@ fun DetailScreen(navController: NavHostController, id: Long? = null){
         "D3IF-46-05"
     )
 
-    if (id != null) {
-        val data = viewModel.getMahasiswa(id)
-        if (data != null) {
-            nama = data.nama
-            nim = data.nim
-            kelas = data.kelas
-        }
+    LaunchedEffect(true) {
+        if (id == null) return@LaunchedEffect
+        val data = viewModel.getMahasiswa(id) ?: return@LaunchedEffect
+        nama = data.nama
+        nim = data.nim
+        kelas = data.kelas
+//        if (data != null) {
+//            nama = data.nama
+//            nim = data.nim
+//            kelas = data.kelas
+//        }
     }
 
 
@@ -113,6 +118,8 @@ fun DetailScreen(navController: NavHostController, id: Long? = null){
                             }
                             if (id == null){
                                 viewModel.insert(nama, nim, kelas)
+                            } else {
+                                viewModel.update(id, nama, nim, kelas)
                             }
                             navController.popBackStack()
                         }) {
