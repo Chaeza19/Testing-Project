@@ -22,8 +22,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,9 +36,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3056.testing.R
+import org.d3if3056.testing.database.MahasiswaDb
 import org.d3if3056.testing.model.Mahasiswa
 import org.d3if3056.testing.navigation.Screen
 import org.d3if3056.testing.ui.theme.TestingTheme
+import org.d3if3056.testing.util.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,8 +74,11 @@ fun MainScreen(navController: NavHostController) {
 
 @Composable
 fun ScreenContent(modifier: Modifier, navController: NavHostController){
-    val viewModel: MainViewModel = viewModel()
-    val data = viewModel.data
+    val context = LocalContext.current
+    val db = MahasiswaDb.getInstance(context)
+    val factory = ViewModelFactory(db.dao)
+    val viewModel : MainViewModel = viewModel(factory = factory)
+    val data by viewModel.data.collectAsState()
 //    val data = emptyList<Catatan>() // jika datanya kosong
 
     if (data.isEmpty()){

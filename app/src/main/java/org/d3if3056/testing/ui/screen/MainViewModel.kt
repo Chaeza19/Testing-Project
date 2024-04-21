@@ -1,10 +1,21 @@
 package org.d3if3056.testing.ui.screen
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import org.d3if3056.testing.database.MahasiswaDao
 import org.d3if3056.testing.model.Mahasiswa
 
-class MainViewModel : ViewModel() {
-    val data = getDataDummy()
+class MainViewModel(dao: MahasiswaDao) : ViewModel() {
+//    val data = getDataDummy()
+    val data: StateFlow<List<Mahasiswa>> = dao.getMahasiswa().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = emptyList()
+    )
+
     private fun getDataDummy():List<Mahasiswa>{
         val data = mutableListOf<Mahasiswa>()
 
