@@ -2,6 +2,7 @@ package org.d3if3056.testing.ui.screen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -173,13 +174,18 @@ fun FormMahasiswa(
                 kelasOptions.forEach { option ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onKelasChange(option) }
                     ) {
                         RadioButton(
                             selected = kelas == option,
                             onClick = { onKelasChange(option) }
                         )
-                        Text(text = option)
+                        Text(
+                            text = option,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
                     }
                 }
             }
