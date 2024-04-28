@@ -47,17 +47,22 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.d3if3056.testing.R
 import org.d3if3056.testing.database.MahasiswaDb
 import org.d3if3056.testing.model.Mahasiswa
 import org.d3if3056.testing.navigation.Screen
 import org.d3if3056.testing.ui.theme.TestingTheme
+import org.d3if3056.testing.util.SettingsDataStore
 import org.d3if3056.testing.util.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController) {
-    var showList by remember { mutableStateOf(true) }
+    val dataStore = SettingsDataStore(LocalContext.current)
+    val showList by dataStore.layoutFlow.collectAsState(true)
 
     Scaffold(
         topBar = { //Untuk Bagian TopBar
@@ -68,7 +73,11 @@ fun MainScreen(navController: NavHostController) {
                     titleContentColor = MaterialTheme.colorScheme.primary
                 ),
                 actions = {
-                    IconButton(onClick = { showList = !showList }) {
+                    IconButton(onClick = {
+                        CoroutineScope(Dispatchers.IO).launch{
+                            dataStore.saveLayout(!showList)
+                        }
+                    }) {
                         Icon(
                             painter = painterResource(
                                 if (showList) R.drawable.baseline_grid_view_24
