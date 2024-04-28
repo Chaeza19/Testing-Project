@@ -1,6 +1,6 @@
 package org.d3if3056.testing.ui.screen
 
-import android.content.res.Configuration
+ import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -48,7 +48,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.room.Delete
 import org.d3if3056.testing.R
 import org.d3if3056.testing.database.MahasiswaDb
 import org.d3if3056.testing.ui.theme.TestingTheme
@@ -67,6 +66,8 @@ fun DetailScreen(navController: NavHostController, id: Long? = null){
     var nama by remember { mutableStateOf("") }
     var nim by remember { mutableStateOf("") }
     var kelas by remember { mutableStateOf("") }
+
+    var showDialog by remember { mutableStateOf(false) }
 
     val kelasOptions = listOf(
         "D3IF-46-01",
@@ -135,6 +136,13 @@ fun DetailScreen(navController: NavHostController, id: Long? = null){
                     }
                     if (id != null){
                         DeleteAction {
+                            showDialog = true
+                        }
+                        DisplayAlertDialog(
+                            openDialog = showDialog,
+                            onDismissRequest = { showDialog = false }
+                        ) {
+                            showDialog = false
                             viewModel.delete(id)
                             navController.popBackStack()
                         }

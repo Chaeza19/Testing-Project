@@ -15,7 +15,7 @@ interface MahasiswaDao {
     @Update
     suspend fun update(mahasiswa: Mahasiswa)
 
-    @Query("SELECT * FROM mahasiswa ORDER BY kelas DESC")
+    @Query("SELECT * FROM mahasiswa ORDER BY kelas ASC, nim ASC")
     fun getMahasiswa() : Flow<List<Mahasiswa>>
 
     @Query("SELECT * FROM mahasiswa WHERE id = :id")
