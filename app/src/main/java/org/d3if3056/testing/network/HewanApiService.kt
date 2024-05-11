@@ -8,6 +8,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 
 private const val BASE_URL = "https://api.thecatapi.com/" + "v1/images/"
+private const val BASE1_URL = "https://cdn2.thecatapi.com/images/"
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -26,5 +27,9 @@ interface HewanApiService {
 object HewanApi {
     val service: HewanApiService by lazy {
         retrofit.create(HewanApiService::class.java)
+    }
+
+    fun getHewanUrl(imageId: String): String{
+        return "$BASE1_URL$imageId.jpg"
     }
 }
